@@ -57,6 +57,22 @@ int main()
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	
+	
+	// Игровой цикл
+	while(!glfwWindowShouldClose(window))
+	{
+		// Проверяем события и вызываем функции обратного вызова.
+		glfwPollEvents();
+		
+		// Команды отрисовки здесь
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		// Меняем буферы местами
+		glfwSwapBuffers(window);
+	}
+	
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
