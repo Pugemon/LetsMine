@@ -11,15 +11,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+//Прототип функции переопределения обратного вызова GLFW
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 int main()
 {
 	//Инициализация GLFW
 	glfwInit();
-		if (!glfwInit())
-		{
-			std::cout << "Failed to initialisation GLFW" << std::endl;
-		}
 	
 	//Настройка GLFW
 	//Задается минимальная требуемая версия OpenGL.
@@ -31,9 +29,10 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//Выключение возможности изменения размера окна
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE); // Mac
-#endif
+	//Настройка для работы на macOS
+	#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+	#endif
 	
 	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
 		if (window == nullptr)
@@ -42,25 +41,45 @@ int main()
 			glfwTerminate();
 			return -1;
 		}
+	//Задаём window текущим окном отрисовки
 	glfwMakeContextCurrent(window);
+	//Переопределяем KeyCallback нашей функцией
+	glfwSetKeyCallback(window, key_callback);
 	
 	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-	{
-		std::cout << "Failed to initialize GLEW" << std::endl;
-		return -1;
-	}
+		if (glewInit() != GLEW_OK)
+		{
+			std::cout << "Failed to initialize GLEW" << std::endl;
+			return -1;
+		}
 	
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	
-	while(!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 	
+	
 	glfwTerminate();
 	return 0;
 }
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	// Когда пользователь нажимает ESC, мы устанавливаем свойство WindowShouldClose в true,
+	// и приложение после этого закроется
+	std::cout << key << std::endl;
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+
+
+
+
+
