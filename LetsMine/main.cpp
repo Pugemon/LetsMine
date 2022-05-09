@@ -19,6 +19,11 @@ int main()
 	//Инициализация GLFW
 	glfwInit();
 	
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialisation GLFW" << std::endl;
+	}
+	
 	//Настройка GLFW
 	//Задается минимальная требуемая версия OpenGL.
 	//Мажорная
